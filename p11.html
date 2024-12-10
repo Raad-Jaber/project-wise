@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الشقق المؤجرة</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <!-- شريط التنقل -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">إدارة الشقق المؤجرة</span>
+        </div>
+    </nav>
+    
+    <!-- شريط البحث -->
+    <div class="container my-4">
+        <div class="input-group">
+            <input type="text" id="search-input" class="form-control" placeholder="ابحث عن الشقة..." onkeyup="filterApartments()">
+        </div>
+    </div>
+
+    <!-- قائمة الشقق -->
+    <div class="container">
+        <h2 class="my-4">الشقق المؤجرة</h2>
+        <div class="row" id="apartment-list"></div>
+    </div>
+
+    <!-- نافذة منبثقة لعرض التفاصيل -->
+    <div class="modal fade" id="apartment-modal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="modal-tenant"></p>
+                    <p id="modal-rent"></p>
+                    <p id="modal-furnished"></p>
+                    <p id="modal-details"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const apartments = [
+            {
+                name: "شقة 101",
+                tenant: "أحمد علي",
+                rent: "5000 ريال",
+                furnished: true,
+                details: "غرفتين نوم + حمام + مطبخ + صالة",
+                status: "مؤجرة"
+            },
+            {
+                name: "شقة 102",
+                tenant: "سارة حسين",
+                rent: "4500 ريال",
+                furnished: false,
+                details: "غرفة نوم + حمام + مطبخ",
+                status: "مؤجرة"
+            },
+            {
+                name: "شقة 103",
+                tenant: "محمد جمال",
+                rent: "6000 ريال",
+                furnished: true,
+                details: "ثلاث غرف نوم + حمام + مطبخ + صالة + تراس",
+                status: "مؤجرة"
+            }
+        ];
+
+        // دالة لعرض الشقق المؤجرة
+        function renderApartments() {
+            const apartmentList = document.getElementById("apartment-list");
+            apartmentList.innerHTML = '';
+            apartments.forEach((apartment) => {
+                const apartmentCard = document.createElement('div');
+                apartmentCard.classList.add('col-md-6', 'mb-4');
+                apartmentCard.innerHTML = `
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">${apartment.name}</h5>
+                            <p class="card-text"><strong>المستأجر:</strong> ${apartment.tenant}</p>
+                            <p class="card-text"><strong>الإيجار:</strong> ${apartment.rent}</p>
+                            <p class="card-text"><strong>مفروشة:</strong> ${apartment.furnished ? 'نعم' : 'لا'}</p>
+                            <p class="card-text"><strong>تفاصيل:</strong> ${apartment.details}</p>
+                            <p class="card-text"><strong>الحالة:</strong> ${apartment.status}</p>
+                            <button class="btn btn-primary" onclick="showDetails('${apartment.name}')">عرض التفاصيل</button>
+                        </div>
+                    </div>
+                `;
+                apartmentList.appendChild(apartmentCard);
+            });
+        }
+
+        // دالة لعرض نافذة منبثقة
+        function showDetails(apartmentName) {
+            const apartment = apartments.find(apartment => apartment.name === apartmentName);
+            if (apartment) {
+                document.getElementById("modal-title").innerText = apartment.name;
+                document.getElementById("modal-tenant").innerText = `المستأجر: ${apartment.tenant}`;
+                document.getElementById("modal-rent").innerText = `الإيجار: ${apartment.rent}`;
+                document.getElementById("modal-furnished").innerText = `مفروشة: ${apartment.furnished ? 'نعم' : 'لا'}`;
+                document.getElementById("modal-details").innerText = `تفاصيل الشقة: ${apartment.details}`;
+                const modal = new bootstrap.Modal(document.getElementById("apartment-modal"));
+                modal.show();
+            }
+        }
+
+        // دالة لتصفية الشقق باستخدام شريط البحث
+        function filterApartments() {
+            const searchInput = document.getElementById("search-input").value.toLowerCase();
+            const filteredApartments = apartments.filter(apartment => 
+                apartment.name.toLowerCase().includes(searchInput) || 
+                apartment.tenant.toLowerCase().includes(searchInput)
+            );
+            renderFilteredApartments(filteredApartments);
+        }
+
+        // دالة لعرض الشقق المفلترة
+        function renderFilteredApartments(filteredApartments) {
+            const apartmentList = document.getElementById("apartment-list");
+            apartmentList.innerHTML = '';
+            filteredApartments.forEach((apartment) => {
+                const apartmentCard = document.createElement('div');
+                apartmentCard.classList.add('col-md-6', 'mb-4');
+                apartmentCard.innerHTML = `
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">${apartment.name}</h5>
+                            <p class="card-text"><strong>المستأجر:</strong> ${apartment.tenant}</p>
+                            <p class="card-text"><strong>الإيجار:</strong> ${apartment.rent}</p>
+                            <p class="card-text"><strong>مفروشة:</strong> ${apartment.furnished ? 'نعم' : 'لا'}</p>
+                            <p class="card-text"><strong>تفاصيل:</strong> ${apartment.details}</p>
+                            <p class="card-text"><strong>الحالة:</strong> ${apartment.status}</p>
+                            <button class="btn btn-primary" onclick="showDetails('${apartment.name}')">عرض التفاصيل</button>
+                        </div>
+                    </div>
+                `;
+                apartmentList.appendChild(apartmentCard);
+            });
+        }
+
+        // تحميل الشقق المؤجرة عند تحميل الصفحة
+        window.onload = renderApartments;
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+```

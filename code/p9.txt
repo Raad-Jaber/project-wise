@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة إدارة المؤجر</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #e3f2fd, #90caf9);
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .card-title, .card-header {
+            font-weight: bold;
+        }
+        .card-header {
+            text-align: center;
+        }
+        .table tbody tr:hover {
+            background-color: #e3f2fd;
+        }
+    </style>
+</head>
+<body>
+    <!-- شريط التنقل -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">لوحة إدارة المؤجر</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="#">الصفحة الرئيسية</a></li>
+                    <li class="nav-item"><a class="nav-link" href="p10.html" target="_blank">إدارة الشقق</a></li>
+                    <li class="nav-item"><a class="nav-link" href="p11.html" target="_blank">الشقق المؤجرة</a></li>
+                    <li class="nav-item"><a class="nav-link" href="p13.html" target="_blank">التقارير</a></li>
+                    <li class="nav-item"><a class="nav-link" href="p1.html">تسجيل الخروج</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- الإحصائيات -->
+    <div class="container mt-4">
+        <div class="row text-center">
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card bg-primary text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">إجمالي الشقق</h5>
+                        <p class="card-text">20 شقة</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card bg-success text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">الشقق المؤجرة</h5>
+                        <p class="card-text">12 شقة</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card bg-info text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">إجمالي المدفوعات المستلمة</h5>
+                        <p class="card-text">10,000 دينار</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card bg-warning text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">إجمالي المدفوعات المستحقة</h5>
+                        <p class="card-text">5,000 دينار</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- الخدمات -->
+    <div class="container mt-4">
+        <div class="row text-center">
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <i class="fas fa-building fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">إدارة الشقق</h5>
+                        <p class="card-text">إضافة شقة جديدة، تعديل أو حذف الشقق.</p>
+                        <button class="btn btn-primary" onclick="window.open('p10.html', '_blank');">إدارة الآن</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <i class="fas fa-key fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">الشقق المؤجرة</h5>
+                        <p class="card-text">عرض جميع الشقق المؤجرة مع تفاصيل المستأجرين.</p>
+                        <button class="btn btn-primary" onclick="window.open('p11.html', '_blank');">عرض الآن</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <i class="fas fa-chart-bar fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">التقارير</h5>
+                        <p class="card-text">عرض تقارير تفصيلية حول الشقق والمدفوعات.</p>
+                        <button class="btn btn-primary" onclick="window.open('p13.html', '_blank');">عرض التقارير</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- قائمة الشقق -->
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4>قائمة الشقق</h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered table-striped text-center">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>رقم الشقة</th>
+                            <th>الحالة</th>
+                            <th>اسم المستأجر</th>
+                            <th>الإجراء</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td class="text-success">مؤجرة</td>
+                            <td>محمد أحمد</td>
+                            <td><button class="btn btn-warning">تعديل</button></td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td class="text-danger">غير مؤجرة</td>
+                            <td>-</td>
+                            <td><button class="btn btn-success">إضافة مستأجر</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

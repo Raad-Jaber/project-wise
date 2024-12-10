@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - التقارير</title>
+    <!-- إضافة رابط Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #f8f9fa, #e0e0e0);
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1e88e5;
+            margin: 20px 0;
+        }
+
+        .dashboard-card {
+            background: linear-gradient(135deg, #64b5f6, #1e88e5);
+            color: white;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            margin: 10px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        canvas {
+            max-width: 100%;
+            margin: 20px auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            background: white;
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 15px;
+            text-align: center;
+        }
+
+        table th {
+            background: #1e88e5;
+            color: white;
+        }
+
+        table tr:nth-child(even) {
+            background: #f1f1f1;
+        }
+
+        table tr:hover {
+            background: #e3f2fd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>لوحة التحكم - التقارير</h1>
+
+        <!-- لوحة التحكم -->
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col">
+                <div class="dashboard-card">
+                    <h2>إجمالي الإيرادات</h2>
+                    <p id="totalRevenue">0 دينار</p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="dashboard-card">
+                    <h2>الشقق المؤجرة</h2>
+                    <p id="rentedApartments">0</p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="dashboard-card">
+                    <h2>الشقق غير المؤجرة</h2>
+                    <p id="unrentedApartments">0</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            <div class="col">
+                <div class="dashboard-card">
+                    <h2>أعلى مالك إيرادات</h2>
+                    <p id="topOwner">غير متوفر</p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="dashboard-card">
+                    <h2>أعلى شقة مستحقات</h2>
+                    <p id="topDueApartment">غير متوفر</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- الرسم البياني -->
+        <canvas id="revenueChart" height="100"></canvas>
+
+        <!-- تكاليف الصيانة -->
+        <h2>تكاليف الصيانة</h2>
+        <table id="maintenanceTable" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>رقم الشقة</th>
+                    <th>اسم المستأجر</th>
+                    <th>تكاليف الصيانة (دينار)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- البيانات الديناميكية -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- إضافة رابط Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // البيانات الوهمية
+        const apartments = [
+            { number: 1, tenant: "محمد أحمد", revenue: 600, due: 0, maintenance: 50 },
+            { number: 2, tenant: "أحمد علي", revenue: 400, due: 0, maintenance: 30 },
+            { number: 3, tenant: "خالد يوسف", revenue: 0, due: 500, maintenance: 70 },
+            { number: 4, tenant: "علي حسين", revenue: 0, due: 300, maintenance: 20 },
+        ];
+
+        // تحديث البيانات في لوحة التحكم
+        function updateDashboard() {
+            const totalRevenue = apartments.reduce((sum, apt) => sum + apt.revenue, 0);
+            const rentedApartments = apartments.filter(apt => apt.revenue > 0).length;
+            const unrentedApartments = apartments.filter(apt => apt.revenue === 0).length;
+            const topOwner = "مالك 1"; // يمكنك استبدالها بحساب تلقائي.
+            const topDueApartment = apartments.reduce((max, apt) => apt.due > max ? apt.due : max, 0);
+
+            document.getElementById("totalRevenue").textContent = `${totalRevenue} دينار`;
+            document.getElementById("rentedApartments").textContent = rentedApartments;
+            document.getElementById("unrentedApartments").textContent = unrentedApartments;
+            document.getElementById("topOwner").textContent = topOwner;
+            document.getElementById("topDueApartment").textContent = `${topDueApartment} دينار`;
+        }
+
+        // عرض البيانات في جدول الصيانة
+        function populateMaintenanceTable() {
+            const tableBody = document.getElementById("maintenanceTable").querySelector("tbody");
+            apartments.forEach(apt => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${apt.number}</td>
+                    <td>${apt.tenant}</td>
+                    <td>${apt.maintenance}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // رسم الإيرادات باستخدام Chart.js
+        function drawRevenueChart() {
+            const ctx = document.getElementById("revenueChart").getContext("2d");
+            const labels = apartments.map(apt => `شقة ${apt.number}`);
+            const data = apartments.map(apt => apt.revenue);
+
+            new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "الإيرادات (دينار)",
+                        data: data,
+                        backgroundColor: "rgba(30, 136, 229, 0.7)",
+                        borderColor: "rgba(30, 136, 229, 1)",
+                        borderWidth: 1,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                    },
+                    scales: {
+                        x: { beginAtZero: true },
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        // استدعاء الوظائف
+        updateDashboard();
+        populateMaintenanceTable();
+        drawRevenueChart();
+    </script>
+</body>
+</html>
